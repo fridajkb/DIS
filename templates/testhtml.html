@@ -55,6 +55,24 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
+        /* the result box */
+    .result-box {
+      grid-column: 1 / span 2;
+      text-align: center;
+      font-size: 1.25rem;
+      padding: 0.5rem;
+      margin: 0.5rem auto;
+      border-radius: 4px;
+      width: fit-content;
+      background: #e0ffe0;   /* light green for success */
+      color: #006600;
+    }
+    .result-box.incorrect {
+      background: #ffe0e0;   /* light red for wrong */
+      color: #660000;
+    }
+
     </style>
 </head>
 <body>
@@ -67,11 +85,11 @@
     </div>
     <div id="movie2">
       <p id="movie2-title">{{movie2_title}}</p>
-    <form action="{{ url_for('check_answer') }}" method="get" style="margin-top:1rem;">
+    <form action="{{ url_for('check_answer') }}" method="post" style="margin-top:1rem;">
       <!-- <button id="higher">Higher</button>
       <button id="lower">Lower</button> -->
-        <!-- <input type="hidden" name="movie1_title" value="{{ movie1_title }}">
-        <input type="hidden" name="movie2_title" value="{{ movie2_title }}"> -->
+        <input type="hidden" name="movie1_title" value="{{ movie1_title }}">
+        <input type="hidden" name="movie2_title" value="{{ movie2_title }}">
         <button type="submit" name="choice" value="higher">Higher</button>
         <button type="submit" name="choice" value="lower">Lower</button>
     </div>
@@ -79,7 +97,7 @@
       <div class="result-box {{ 'incorrect' if result=='Incorrect.' }}">
         {{ result }}
       </div>
-    {% endif %}
+        {% endif %}
   </div>
 
 </body>
