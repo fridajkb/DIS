@@ -77,10 +77,18 @@
       cursor: pointer;
       transition: background-color 0.3s;
       
+      
     }
 
         /* the result box */
-    .result-box {
+    .result-box-correct {
+      grid-area: movie2_botbot;
+      padding: 1rem;
+      border-radius: 5px;
+      margin-top: 1rem;
+      text-align: center;
+    }
+    .result-box-wrong {
       grid-area: movie2_botbot;
       padding: 1rem;
       border-radius: 5px;
@@ -97,28 +105,44 @@
     </header>
     <div id="movie1_top">
       <h2 id="movie1-title">{{movie1_title}}</h2>
+      <h3 id ="movie1-gross"> {{movie1_gross}} </h3>
     </div>
     <div id="movie2_top">
       <h2 id="movie2-title">{{movie2_title}}</h2>
-        
+      <h3 id ="movie1-gross"> {{movie2_gross}} </h3>
     </div>
     <div id = "movie2-bot">
       <form action="{{ url_for('check_answer') }}" method="post" style="margin-top:1rem;">
-        <input type="hidden" name="movie1_title" value="{{ movie1_title }}">
-        <input type="hidden" name="movie2_title" value="{{ movie2_title }}">
+        <!-- <input type="hidden" name="movie1_title" value="{{ movie1_title }}">
+        <input type="hidden" name="movie2_title" value="{{ movie2_title }}"> -->
         <button type="submit" name="choice" value="higher">Higher</button>
         <button type="submit" name="choice" value="lower">Lower</button>
+      </form>
+    {% if next_avb %}
+      <form action="{{ url_for('next_pair') }}" method="post" style="margin-top:1rem;">
+        <button type="submit" name="next" value="True">Next</button>
+      </form>
+    {% endif %}
     </div>
+    
+
 
     <!-- <div id="movie2-botbot"> -->
-        {% if result %}
-    <div id="movie2-botbot" class="result-box">
-          {{ result }}
+        {% if result=="correct" %}
+    <div id="movie2-botbot" class="result-box-correct">
+          <h3>Correct!</h3> 
     </div>
+        {% endif %}
+        {% if result=="not correct" %}
+      <div id="movie2-botbot" class="result-box-wrong">
+          <h3>Du er helt krøllet g</h3>
+      </div>
         {% endif %}
     <!-- </div> -->
   </div>
+ 
   
+
       
   </div>
 

@@ -20,8 +20,7 @@ def display():
     global movie1_name, movie2_name, movie1_gross, movie2_gross
     conn = db_connection()
     c = conn.cursor()
-    c.execute('SELECT max(id) FROM movies;')
-    result = c.fetchone()
+    result = c.execute('SELECT max(id) FROM movies;').fetchone()
     maxid = result[0]
     movieID1 = random.randint(1, maxid)
     movieID2 = random.randint(1, maxid)
@@ -39,17 +38,18 @@ def display():
     except:
         print(movie1_name, movie2_name)
 
+    
 
     return render_template("testhtml.html",
         movie1_title=movie1["title"],
         movie2_title=movie2["title"],
-        result=None
+        result=None, movie1_gross =movie1_gross
     )
 
 @app.route('/check_answer', methods=['POST'])
 def check_answer():
     choice = request.form["choice"]        # "higher" or "lower"
-    is_correct = False
+    is_correct = ""
 
     print(choice)
 
@@ -57,18 +57,23 @@ def check_answer():
     
     if choice == "higher":
         if movie1_gross <= movie2_gross:
-            is_correct = True
+            is_correct = "correct"
         else:
-            is_correct= False
+            is_correct= "not correct"
     elif choice == "lower":
         if movie1_gross >= movie2_gross:
-            is_correct = True
+            is_correct = "correct"
         else:
-            is_correct= False
+            is_correct= "not correct"
     
 
     return render_template("testhtml.html", movie1_title = movie1_name, movie2_title=movie2_name,
-                           result=is_correct)
+                           result=is_correct, movie1_gross = movie1_gross, movie2_gross=movie2_gross, next_avb = True)
+
+@app.route('/next_pair', methods=['POST'])
+def next_pair():
+    print("hej")
+    return display()
 
 if __name__ == "__main__":
     app.run()
