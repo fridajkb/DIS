@@ -9,41 +9,62 @@
     .grid-container {
       display: grid;
       height: 100vh;
-      grid-template-rows: auto 1fr;          /* header auto, content fills rest */
-      grid-template-columns: 1fr 1fr;       /* two equal columns below */
+      grid-template-rows: auto 1fr 1fr 1fr;                  /* header, movie‐tops, movie‐bottoms */
+      grid-template-columns: 1fr 1fr;                   /* two columns */
       grid-template-areas:
-        "header header"
-        "movie1 movie2";
+        "header       header"
+        "movie1-top   movie2-top"
+        "movie1-bot   movie2-bot"
+        "movie1_botbot movie2_botbot";
+      /* gap: 1rem; */
+    }
+
+    /* Center everything in each cell */
+    .grid-container > div {
+      display: grid;
+      place-items: center;
     }
 
     header {
       grid-area: header;
       background: #ff75dca0;
       color: white;
-      padding: 1rem;
       text-align: center;
-      font-size: 1.5rem;
     }
 
-    #movie1 {
-      grid-area: movie1;
-      border: 1px solid #ccc;
-      padding: 1rem;
+    /* Movie 1 */
+    #movie1-top {
+      grid-area: movie1-top;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.25rem;
     }
 
-    #movie2 {
-      grid-area: movie2;
-      border: 1px solid #ccc;
-      padding: 1rem;
+    #movie1-bot {
+      grid-area: movie1-bot;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.25rem;
     }
+
+    #movie1_botbot {
+      grid-area: movie1_botbot;
+      display: flex;
+    }
+
+    /* Movie 2 */
+    #movie2-top {
+      grid-area: movie2-top;
+      display: flex;
+    }
+
+    #movie2-bot {
+      grid-area: movie2-bot;
+      display: flex;
+    }
+
+    #movie2_botbot {
+      grid-area: movie2_botbot;
+      display: flex;
+    }
+
+  
 
     button {
       margin: 0 1rem;
@@ -54,23 +75,17 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      transition: background-color 0.3s;
+      
     }
 
         /* the result box */
     .result-box {
-      grid-column: 1 / span 2;
+      grid-area: movie2_botbot;
+      padding: 1rem;
+      border-radius: 5px;
+      margin-top: 1rem;
       text-align: center;
-      font-size: 1.25rem;
-      padding: 0.5rem;
-      margin: 0.5rem auto;
-      border-radius: 4px;
-      width: fit-content;
-      background: #e0ffe0;   /* light green for success */
-      color: #006600;
-    }
-    .result-box.incorrect {
-      background: #ffe0e0;   /* light red for wrong */
-      color: #660000;
     }
 
     </style>
@@ -80,24 +95,31 @@
     <header>
       <h1>Higher or Lower Game</h1>
     </header>
-    <div id="movie1">
-      <p id="movie1-title">{{movie1_title}}</p>
+    <div id="movie1_top">
+      <h2 id="movie1-title">{{movie1_title}}</h2>
     </div>
-    <div id="movie2">
-      <p id="movie2-title">{{movie2_title}}</p>
-    <form action="{{ url_for('check_answer') }}" method="post" style="margin-top:1rem;">
-      <!-- <button id="higher">Higher</button>
-      <button id="lower">Lower</button> -->
+    <div id="movie2_top">
+      <h2 id="movie2-title">{{movie2_title}}</h2>
+        
+    </div>
+    <div id = "movie2-bot">
+      <form action="{{ url_for('check_answer') }}" method="post" style="margin-top:1rem;">
         <input type="hidden" name="movie1_title" value="{{ movie1_title }}">
         <input type="hidden" name="movie2_title" value="{{ movie2_title }}">
         <button type="submit" name="choice" value="higher">Higher</button>
         <button type="submit" name="choice" value="lower">Lower</button>
     </div>
+
+    <!-- <div id="movie2-botbot"> -->
         {% if result %}
-      <div class="result-box {{ 'incorrect' if result=='Incorrect.' }}">
-        {{ result }}
-      </div>
+    <div id="movie2-botbot" class="result-box">
+          {{ result }}
+    </div>
         {% endif %}
+    <!-- </div> -->
+  </div>
+  
+      
   </div>
 
 </body>

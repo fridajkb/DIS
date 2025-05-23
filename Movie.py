@@ -1,12 +1,13 @@
 from flask import Flask, render_template, request # We import render_template so we can render Jinja2 code, and request so we can handle POSTs
 # We import sqlite, likely we don't need to install any new library because this is a default Python library
-import sqlite3
+import sqlite3, csv, re
 
+empty_or_whitespace = r'^\s*$'
 # This creates the connection to the database
 def db_connection():
     # When we run this code we will this file being created. The file will persist between executations of the server.
     # Keep in mind that you may need to delete this file every time you change the schema of your database.
-    conn = sqlite3.connect('todo.db')
+    conn = sqlite3.connect('movies.db')
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -14,17 +15,26 @@ def db_connection():
 def init_db():
     conn = db_connection()
     # We create a table that has two fields: the id of the todo, and a todo_text that is unique
-    conn.execute('''CREATE TABLE IF NOT EXISTS todos (id INTEGER PRIMARY KEY AUTOINCREMENT, todo_text TEXT NOT NULL UNIQUE)''')
+    conn.execute('''CREATE TABLE IF NOT EXISTS movies (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                    title TEXT NOT NULL, year INTEGER, gross INTEGER)''')
 
     # This cursor a database bureaucracy: it is a control structure that enables traversal over the records in a database.
     c = conn.cursor()
-    todos = ['DIS assignment 1', 'Groceries', 'DIS assignment 2', 'DIS project']
-    for todo in todos:
-        # (todo, ) is a Python quirk: we need to provide tuples to the insert query, and that is how we can define a tuple with a single element (an 1-nary tuple).
-        # The OR IGNORE is a trick so when we run the database again we don't get errors from duplicated entries (as we have the UNIQUE constraint).
-        c.execute('INSERT OR IGNORE INTO todos (todo_text) VALUES (?)', (todo,))
-
+    with open('imdb_top_1000.csv', 'r', newline='') as file:
+            csv_reader = csv.reader(file)
+            for row in csv_reader:
+                title = row[1]
+                year = row[2]
+                gross = row[15].replace(',', '').replace('"', '')
+                if re.match(empty_or_whitespace, title) or re.match(empty_or_whitespace, year) or re.match(empty_or_whitespace, gross):
+                    continue
+                c.execute('INSERT INTO movies (title, year, gross) VALUES (?, ?, ?)', 
+                  (title, year, gross))
     conn.commit()
+    c.execute('SELECT * from movies')
+
+    for row in c.fetchall():
+        print(row['gross'])
     conn.close()
 
 # We initialize the database

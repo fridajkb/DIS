@@ -6,7 +6,6 @@ app = Flask(__name__)
 @app.route('/')
 def display(movie1_title="Movie 00", movie2_title="Movie 2"):
 
-
     return render_template('testhtml.html', movie1_title="Movie 00", movie2_title="Movie 2", result=False)
 
 @app.route('/check_answer', methods=['POST'])
@@ -15,6 +14,7 @@ def check_answer():
     m2 = request.form["movie2_title"]
     choice = request.form["choice"]        # "higher" or "lower"
     is_correct = True
+    # SQL to get the gross of the movies
 
     return render_template("testhtml.html",
                            movie1_title="movie1_title",
