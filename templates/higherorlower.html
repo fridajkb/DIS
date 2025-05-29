@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Higher or Lower Game</title>
+  <style>
+    .grid-container {
+      display: grid;
+      height: 100vh;
+      grid-template-columns: 1fr auto 1fr; /* Movie 1 | Center | Movie 2 */
+      grid-template-rows: auto 1fr 1fr;
+      grid-template-areas:
+        "header header header"
+        "movie1 result movie2"
+        "movie1 result movie2";
+      position: relative;
+      gap: 1rem;
+    }
+
+    header {
+      grid-area: header;
+      background: #ff75dca0;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    #movie1 {
+      grid-area: movie1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #movie2 {
+      grid-area: movie2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .result-area {
+      grid-area: result;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .result-message {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .correct {
+      color: green;
+    }
+
+    .wrong {
+      color: red;
+    }
+
+    button {
+      margin: 0.5rem;
+      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .choice-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-container">
+    <header>
+      <h1>Higher or Lower Game</h1>
+    </header>
+
+    <!-- Movie 1 -->
+    <div id="movie1">
+      <h1>{{movie1_title}}</h2>
+      <h3>Domestic(USA) Gross: {{movie1_gross}}</h3>
+    </div>
+
+    <!-- Movie 2 -->
+    <div id="movie2">
+      <h1>{{movie2_title}}</h2>
+      <h3>Domestic(USA) Gross: {{movie2_gross}}</h3>
+    </div>
+
+    <!-- Centered Result & Buttons -->
+    <div class="result-area">
+      {% if result == "correct" %}
+        <div class="result-message correct">Correct!</div>
+      {% elif result == "not correct" %}
+        <div class="result-message wrong">Wrong!</div>
+      {% endif %}
+      {%if not next_avb%}
+      <form action="{{ url_for('check_answer') }}" method="post">
+        <div class="choice-buttons">
+          <button type="submit" name="choice" value="higher">Higher</button>
+          <button type="submit" name="choice" value="lower">Lower</button>
+        </div>
+      </form>
+      {% endif %}
+      {% if next_avb %}
+        <form action="{{ url_for('next_pair') }}" method="post">
+          <button type="submit" name="next" value="True">Next</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

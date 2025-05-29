@@ -15,12 +15,6 @@ def init_db():
     # We create a table that has two fields: the id of the todo, and a todo_text that is unique
     conn.execute('''CREATE TABLE IF NOT EXISTS movies (id INTEGER PRIMARY KEY AUTOINCREMENT, 
                     title TEXT NOT NULL, year INTEGER, gross INTEGER)''')
-    conn.execute('''CREATE TABLE IF NOT EXISTS rounds (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                    correct_anwser TEXT NOT NULL, 
-                       REFERENCES movies(movie_id)
-                        ON DELETE SET NULL
-                        ON UPDATE CASCADE)''')
 
     c = conn.cursor()
     with open('imdb_top_1000.csv', 'r', newline='') as file:
@@ -30,12 +24,9 @@ def init_db():
                 year = row[2]
                 gross = row[15].replace(',', '').replace('"', '')
                 if (re.match(is_digit, year) and re.match(is_digit, gross)) and (year != None and gross != None and title !=  None):
-                    print(title, gross)
-                    print(re.match(is_digit, gross))
                     c.execute('INSERT INTO movies (title, year, gross) VALUES (?, ?, ?)', 
                     (title, year, gross))
                 else:
-                    print("ERROR")
                     continue
     conn.commit()
     conn.close()
