@@ -2,8 +2,6 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for
 import sqlite3, csv, random, re
 
 def db_connection():
-    # When we run this code we will this file being created. The file will persist between executations of the server.
-    # Keep in mind that you may need to delete this file every time you change the schema of your database.
     conn = sqlite3.connect('movies.db')
     conn.row_factory = sqlite3.Row
     return conn
@@ -17,7 +15,6 @@ movie1_gross = -1
 movie2_gross = 0
 app = Flask(__name__)
 
-# We have a new route to /todo
 @app.route("/")
 def display():
     global movie1_name, movie2_name, movie1_gross, movie2_gross
