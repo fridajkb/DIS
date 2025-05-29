@@ -76,14 +76,13 @@
       border-radius: 5px;
       cursor: pointer;
       transition: background-color 0.3s;
-      
-      
     }
 
         /* the result box */
     .result-box-correct {
       grid-area: movie2_botbot;
       padding: 1rem;
+      color: green;
       border-radius: 5px;
       margin-top: 1rem;
       text-align: center;
@@ -91,6 +90,7 @@
     .result-box-wrong {
       grid-area: movie2_botbot;
       padding: 1rem;
+      color: red;
       border-radius: 5px;
       margin-top: 1rem;
       text-align: center;
@@ -105,11 +105,12 @@
     </header>
     <div id="movie1_top">
       <h2 id="movie1-title">{{movie1_title}}</h2>
-      <h3 id ="movie1-gross"> {{movie1_gross}} </h3>
+      <h3 id ="movie1-gross">Gross: {{movie1_gross}} </h3>
+      
     </div>
     <div id="movie2_top">
       <h2 id="movie2-title">{{movie2_title}}</h2>
-      <h3 id ="movie1-gross"> {{movie2_gross}} </h3>
+      <h3 id ="movie1-gross">{{movie2_gross}} </h3>
     </div>
     <div id = "movie2-bot">
       <form action="{{ url_for('check_answer') }}" method="post" style="margin-top:1rem;">
@@ -135,7 +136,7 @@
         {% endif %}
         {% if result=="not correct" %}
       <div id="movie2-botbot" class="result-box-wrong">
-          <h3>Du er helt krøllet g</h3>
+          <h3>Wrong!</h3>
       </div>
         {% endif %}
     <!-- </div> -->
